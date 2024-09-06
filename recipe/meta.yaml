@@ -38,6 +38,7 @@ requirements:
     - nodejs
     - pydata-sphinx-theme
     - numexpr <2.8.5
+    - pygix
 
 test:
   imports:
