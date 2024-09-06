@@ -36,8 +36,6 @@ requirements:
     - astropy
     - fabio
     - nodejs
-    - silx ==2.0.0
-    - pygix
     - pydata-sphinx-theme
     - numexpr <2.8.5
 
