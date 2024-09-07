@@ -12,7 +12,7 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 1
+  number: 2
 
 requirements:
   host:
@@ -37,7 +37,7 @@ requirements:
     - fabio
     - nodejs
     - pydata-sphinx-theme
-    - numexpr <2.8.5
+    - numexpr !=2.8.5,!=2.8.6
     - pygix
 
 test:
