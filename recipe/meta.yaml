@@ -37,7 +37,7 @@ requirements:
     - fabio
     - nodejs
     - pydata-sphinx-theme
-    - numexpr <2.8.5,>=2.8.7
+    - numexpr !=2.8.5,!=2.8.6
     - pygix
 
 test:
