@@ -12,7 +12,7 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
 
 requirements:
   host:
@@ -33,7 +33,7 @@ requirements:
     - pillow
     - xarray
     - tqdm
-    - astropy
+    - astropy-base
     - fabio
     - nodejs
     - pydata-sphinx-theme
