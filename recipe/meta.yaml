@@ -12,17 +12,17 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
 
 requirements:
   host:
-    - python >=3.6
+    - python {{ python_min }}
     - setuptools
     - wheel
     - versioneer
     - pip
   run:
-    - python >=3.6
+    - python >={{ python_min }}
     - h5py
     - numpy <2
     - pandas
@@ -41,6 +41,8 @@ requirements:
     - pygix
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - PyHyperScattering
 
