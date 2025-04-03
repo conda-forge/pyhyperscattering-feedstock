@@ -16,13 +16,13 @@ build:
 
 requirements:
   host:
-    - python >=3.6
+    - python {{ python_min }}
     - setuptools
     - wheel
     - versioneer
     - pip
   run:
-    - python >=3.6
+    - python >={{ python_min }}
     - h5py
     - numpy <2
     - pandas
@@ -33,12 +33,11 @@ requirements:
     - pillow
     - xarray
     - tqdm
-    - astropy
+    - astropy-base
     - fabio
     - nodejs
     - pydata-sphinx-theme
     - numexpr !=2.8.5,!=2.8.6
-    - pygix
 
 test:
   imports:
@@ -47,7 +46,6 @@ test:
 about:
   summary: Utilities for loading, reducing, fitting, and plotting hyperspectral x-ray and neutron scattering data.
   license: NIST-PD
-  license_file: LICENSE
   home: https://www.github.com/usnistgov/PyHyperScattering
 
 extra:
