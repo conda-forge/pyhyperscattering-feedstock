@@ -5,7 +5,7 @@ Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/pyhyperscatteri
 
 Home: https://www.github.com/usnistgov/PyHyperScattering
 
-Package license: NIST-PD
+Package license: NIST-PD-fallback
 
 Summary: Utilities for loading, reducing, fitting, and plotting hyperspectral x-ray and neutron scattering data.
 
