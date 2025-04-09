@@ -12,7 +12,7 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
 
 requirements:
   host:
@@ -40,6 +40,8 @@ requirements:
     - numexpr !=2.8.5,!=2.8.6
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - PyHyperScattering
 
