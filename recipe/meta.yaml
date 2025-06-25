@@ -27,11 +27,11 @@ requirements:
     - numpy
     - pandas
     - pyfai
-    - pyopencl
     - scikit-image
     - scipy
     - pillow
     - xarray
+    - bottleneck
     - tqdm
     - astropy-base
     - fabio
