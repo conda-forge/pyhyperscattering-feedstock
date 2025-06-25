@@ -1,5 +1,5 @@
 {% set name = "pyhyperscattering" %}
-{% set version = "0.2.9" %}
+{% set version = "0.2.10" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pyhyperscattering-{{ version }}.tar.gz
-  sha256: c5c30074791f1edbb1a5fcd5dbef4604b5c97bfac4c28c619f07f332b840bb6c
+  sha256: 99fe317f8e24204a125fc281b7eb9602959b323d5d4cfc5ad4d3aa3505c74523
 
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 1
+  number: 0
 
 requirements:
   host:
@@ -24,7 +24,7 @@ requirements:
   run:
     - python >={{ python_min }}
     - h5py
-    - numpy <2
+    - numpy
     - pandas
     - pyfai
     - pyopencl
@@ -35,7 +35,6 @@ requirements:
     - tqdm
     - astropy-base
     - fabio
-    - nodejs
     - pydata-sphinx-theme
     - numexpr !=2.8.5,!=2.8.6
 
