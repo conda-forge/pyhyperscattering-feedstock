@@ -24,7 +24,7 @@ requirements:
   run:
     - python >={{ python_min }}
     - h5py
-    - numpy <2
+    - numpy
     - pandas
     - pyfai
     - pyopencl
@@ -35,7 +35,6 @@ requirements:
     - tqdm
     - astropy-base
     - fabio
-    - nodejs
     - pydata-sphinx-theme
     - numexpr !=2.8.5,!=2.8.6
 
