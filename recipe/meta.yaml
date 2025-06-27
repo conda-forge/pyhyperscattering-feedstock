@@ -1,113 +1,129 @@
-{% set name = "pyhyperscattering" %}
 {% set version = "0.2.10" %}
 
 #######################################################################
-#  Placeholder root – never uploaded
+#  Root package (never uploaded separately once outputs are defined)
 #######################################################################
 package:
-  name: {{ name }}-suite          # dummy, avoids clashes with outputs
+  name: pyhyperscattering-base
   version: {{ version }}
 
-#######################################################################
-#  Single source section for all outputs
-#######################################################################
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/p/pyhyperscattering/pyhyperscattering-{{ version }}.tar.gz
   sha256: 99fe317f8e24204a125fc281b7eb9602959b323d5d4cfc5ad4d3aa3505c74523
 
 #######################################################################
-#  OUTPUTS
+#  Build / runtime for the *base* variant
+#######################################################################
+build:
+  number: 0
+  noarch: python
+  
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+    - wheel
+    - versioneer
+  run:
+    - python >={{ python_min }}
+    - h5py
+    - numpy
+    - pandas
+    - pyfai
+    - scikit-image
+    - scipy
+    - pillow
+    - xarray
+    - bottleneck
+    - tqdm
+    - astropy-base
+    - fabio
+    - pydata-sphinx-theme
+    - numexpr !=2.8.5,!=2.8.6
+  run_constrained:
+    # Prevent mixing old monolithic packages with the split recipe
+    - pyhyperscattering >={{ version }}
+
+#######################################################################
+#  Quick smoke-tests for C-extension imports and pip consistency
+#######################################################################
+test:
+  requires:
+    - python {{ python_min }}
+    - pip
+  imports:
+    - PyHyperScattering
+  commands:
+    - pip check
+
+#######################################################################
+#  MULTI-OUTPUT SECTION
 #######################################################################
 outputs:
+  #####################################################################
+  # 1) The real build (core, minimal)
+  #####################################################################
+  - name: pyhyperscattering-base
+    build:
+      script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+    run_exports:
+      # keep downstream ABI-compatible on minor bumps
+      - {{ pin_subpackage("pyhyperscattering-base", max_pin="x.x") }}
 
-########################################################################
-#  1) Core build: pyhyperscattering-base
-########################################################################
-  - name: {{ name }}-base
+  ###################################################################
+  # 2) Convenience “all-nogpu” bundle (noarch)
+  ###################################################################
+  - name: pyhyperscattering
     build:
       noarch: python
-      number: 0
-      script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+      script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
     requirements:
       host:
         - python {{ python_min }}
-        - pip
-        - setuptools
-        - wheel
-        - versioneer
       run:
-        - python >={{ python_min }}
-        - h5py
-        - numpy
-        - pandas
-        - pyfai
-        - scikit-image
-        - scipy
-        - pillow
-        - xarray
-        - bottleneck
-        - tqdm
-        - astropy-base
-        - fabio
+        - python >= {{ python_min }}
+        - {{ pin_subpackage("pyhyperscattering-base", max_pin="x.x.x") }}
+        # ---------- all-nogpu extras ----------
+        - tiled[client] >=0.1.0a74
+        - bluesky-tiled-plugins
+        - pyopencl
+        - dask
+        - holoviews
+        - hvplot
+        - sphinx
         - pydata-sphinx-theme
-        - numexpr !=2.8.5,!=2.8.6
-    run_exports:
-      # keep downstream ABI-compatible on minor bump
-      - {{ pin_subpackage(name + "-base", max_pin="x.x") }}
-    test:  
+        - pytest
+        - black
+        - codecov
+        - pylint
+        - flake8
+        - coverage
+        - pybind11
+        - wheel
+    test:
       requires:
         - python {{ python_min }}
-        - pip
-      imports:
-        - PyHyperScattering
       commands:
         - pip check
-
-########################################################################
-#  2) Convenience “all-nogpu” bundle: pyhyperscattering
-########################################################################
-  - name: {{ name }}
-    build:
-      noarch: generic
-      number: 0
-      script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
-    requirements:
-      run:
-        - {{ pin_subpackage(name + "-base", exact=True) }}
-        # ---- extras: all-nogpu ----
-        - tiled >=0.1.0a74
-        - bluesky-tiled-plugins
-        - pyopencl
-        - dask
-        - holoviews
-        - hvplot
-        - sphinx
-        - pydata-sphinx-theme
-        - pytest
-        - black
-        - codecov
-        - pylint
-        - flake8
-        - coverage
-        - pybind11
-        - wheel
-    test:
       imports:
         - PyHyperScattering
 
-########################################################################
-#  3) GPU bundle: pyhyperscattering-gpu  (all-nogpu + GPU bits)
-########################################################################
-  - name: {{ name }}-gpu
+  ###################################################################
+  # 3) GPU bundle (all-nogpu + CUDA/CuPy etc.) – also noarch
+  ###################################################################
+  - name: pyhyperscattering-gpu
     build:
-      noarch: generic
-      number: 0
+      noarch: python
       script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
     requirements:
+      host:
+        - python {{ python_min }}
       run:
-        - {{ pin_subpackage(name + "-base", exact=True) }}
-        # ---- extras shared with all-nogpu ----
-        - tiled >=0.1.0a74
+        - python >= {{ python_min }}
+        - {{ pin_subpackage("pyhyperscattering-base", max_pin="x.x.x") }}
+        # ---------- shared with all-nogpu ----------
+        - tiled[client] >=0.1.0a74
         - bluesky-tiled-plugins
         - pyopencl
         - dask
@@ -123,15 +139,20 @@ outputs:
         - coverage
         - pybind11
         - wheel
-        # ---- GPU-only additions ----
+        # ---------- GPU-specific additions ----------
         - cupy
-        - cudatoolkit             # virtual package resolved at install time
+        - cudatoolkit              # resolves to host GPU at install time
+        - pygix
+        - silx ==2.0.0
     test:
+      requires:
+        - python {{ python_min }}
+      commands:
+        - pip check
       imports:
         - PyHyperScattering
-
 #######################################################################
-#  Meta information (shared)
+#  Metadata
 #######################################################################
 about:
   summary: Utilities for loading, reducing, fitting, and plotting hyperspectral x-ray and neutron scattering data.
@@ -139,6 +160,6 @@ about:
   home: https://github.com/usnistgov/PyHyperScattering
 
 extra:
+  feedstock-name: pyhyperscattering
   recipe-maintainers:
     - pbeaucage
-  feedstock-name: {{ name }}
