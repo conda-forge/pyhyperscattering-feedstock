@@ -58,15 +58,14 @@ outputs:
     run_exports:
       # keep downstream ABI-compatible on minor bump
       - {{ pin_subpackage(name + "-base", max_pin="x.x") }}
-    test:
+    test:  
+      requires:
+        - python {{ python_min }}
+        - pip
       imports:
         - PyHyperScattering
       commands:
-        - python - <<'PY'
-import importlib, sys
-importlib.import_module("PyHyperScattering")
-print("import OK")
-PY
+        - pip check
 
 ########################################################################
 #  2) Convenience “all-nogpu” bundle: pyhyperscattering
