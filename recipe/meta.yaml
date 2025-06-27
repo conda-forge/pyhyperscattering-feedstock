@@ -9,9 +9,6 @@ package:
   name: {{ name }}-suite          # dummy, avoids clashes with outputs
   version: {{ version }}
 
-extra:
-  feedstock-name: {{ name }}      # <-- important for conda-smithy bots
-
 #######################################################################
 #  Single source section for all outputs
 #######################################################################
@@ -143,3 +140,4 @@ about:
 extra:
   recipe-maintainers:
     - pbeaucage
+  feedstock-name: {{ name }}
