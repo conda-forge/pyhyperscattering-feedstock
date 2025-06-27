@@ -1,6 +1,5 @@
 {% set name = "pyhyperscattering" %}
 {% set version = "0.2.10" %}
-{% set python_min = "3.9" %}
 
 #######################################################################
 #  Placeholder root – never uploaded
@@ -37,7 +36,7 @@ outputs:
         - wheel
         - versioneer
       run:
-        - python >= {{ python_min }}
+        - python >={{ python_min }}
         - h5py
         - numpy
         - pandas
@@ -70,6 +69,7 @@ outputs:
   - name: {{ name }}
     build:
       noarch: generic
+      number: 0
       script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
     requirements:
       run:
@@ -101,6 +101,7 @@ outputs:
   - name: {{ name }}-gpu
     build:
       noarch: generic
+      number: 0
       script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
     requirements:
       run:
