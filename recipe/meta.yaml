@@ -1,8 +1,5 @@
 {% set version = "0.2.10" %}
 
-#######################################################################
-#  Root package (never uploaded separately once outputs are defined)
-#######################################################################
 package:
   name: pyhyperscattering-base
   version: {{ version }}
@@ -11,9 +8,6 @@ source:
   url: https://pypi.org/packages/source/p/pyhyperscattering/pyhyperscattering-{{ version }}.tar.gz
   sha256: 99fe317f8e24204a125fc281b7eb9602959b323d5d4cfc5ad4d3aa3505c74523
 
-#######################################################################
-#  Build / runtime for the *base* variant
-#######################################################################
 build:
   number: 0
   noarch: python
@@ -42,12 +36,7 @@ requirements:
     - pydata-sphinx-theme
     - numexpr !=2.8.5,!=2.8.6
   run_constrained:
-    # Prevent mixing old monolithic packages with the split recipe
     - pyhyperscattering >={{ version }}
-
-#######################################################################
-#  Quick smoke-tests for C-extension imports and pip consistency
-#######################################################################
 test:
   requires:
     - python {{ python_min }}
@@ -56,24 +45,13 @@ test:
     - PyHyperScattering
   commands:
     - pip check
-
-#######################################################################
-#  MULTI-OUTPUT SECTION
-#######################################################################
 outputs:
-  #####################################################################
-  # 1) The real build (core, minimal)
-  #####################################################################
   - name: pyhyperscattering-base
     build:
       script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
     run_exports:
       # keep downstream ABI-compatible on minor bumps
       - {{ pin_subpackage("pyhyperscattering-base", max_pin="x.x") }}
-
-  ###################################################################
-  # 2) Convenience “all-nogpu” bundle (noarch)
-  ###################################################################
   - name: pyhyperscattering
     build:
       noarch: python
@@ -104,14 +82,11 @@ outputs:
     test:
       requires:
         - python {{ python_min }}
+        - pip
       commands:
         - pip check
       imports:
         - PyHyperScattering
-
-  ###################################################################
-  # 3) GPU bundle (all-nogpu + CUDA/CuPy etc.) – also noarch
-  ###################################################################
   - name: pyhyperscattering-gpu
     build:
       noarch: python
@@ -142,18 +117,14 @@ outputs:
         # ---------- GPU-specific additions ----------
         - cupy
         - cudatoolkit              # resolves to host GPU at install time
-        - pygix
-        - silx ==2.0.0
     test:
       requires:
         - python {{ python_min }}
+        - pip
       commands:
         - pip check
       imports:
         - PyHyperScattering
-#######################################################################
-#  Metadata
-#######################################################################
 about:
   summary: Utilities for loading, reducing, fitting, and plotting hyperspectral x-ray and neutron scattering data.
   license: NIST-PD-fallback
