@@ -3,7 +3,7 @@ About pyhyperscattering-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/pyhyperscattering-feedstock/blob/main/LICENSE.txt)
 
-Home: https://www.github.com/usnistgov/PyHyperScattering
+Home: https://github.com/usnistgov/PyHyperScattering
 
 Package license: NIST-PD-fallback
 
@@ -28,6 +28,8 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-pyhyperscattering-green.svg)](https://anaconda.org/conda-forge/pyhyperscattering) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyhyperscattering.svg)](https://anaconda.org/conda-forge/pyhyperscattering) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyhyperscattering.svg)](https://anaconda.org/conda-forge/pyhyperscattering) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyhyperscattering.svg)](https://anaconda.org/conda-forge/pyhyperscattering) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pyhyperscattering--base-green.svg)](https://anaconda.org/conda-forge/pyhyperscattering-base) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyhyperscattering-base.svg)](https://anaconda.org/conda-forge/pyhyperscattering-base) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyhyperscattering-base.svg)](https://anaconda.org/conda-forge/pyhyperscattering-base) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyhyperscattering-base.svg)](https://anaconda.org/conda-forge/pyhyperscattering-base) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pyhyperscattering--gpu-green.svg)](https://anaconda.org/conda-forge/pyhyperscattering-gpu) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyhyperscattering-gpu.svg)](https://anaconda.org/conda-forge/pyhyperscattering-gpu) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyhyperscattering-gpu.svg)](https://anaconda.org/conda-forge/pyhyperscattering-gpu) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyhyperscattering-gpu.svg)](https://anaconda.org/conda-forge/pyhyperscattering-gpu) |
 
 Installing pyhyperscattering
 ============================
@@ -39,16 +41,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `pyhyperscattering` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `pyhyperscattering, pyhyperscattering-base, pyhyperscattering-gpu` can be installed with `conda`:
 
 ```
-conda install pyhyperscattering
+conda install pyhyperscattering pyhyperscattering-base pyhyperscattering-gpu
 ```
 
 or with `mamba`:
 
 ```
-mamba install pyhyperscattering
+mamba install pyhyperscattering pyhyperscattering-base pyhyperscattering-gpu
 ```
 
 It is possible to list all of the versions of `pyhyperscattering` available on your platform with `conda`:
