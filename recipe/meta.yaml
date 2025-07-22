@@ -1,26 +1,24 @@
-{% set name = "pyhyperscattering" %}
 {% set version = "0.2.10" %}
 
 package:
-  name: {{ name|lower }}
+  name: pyhyperscattering-base
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pyhyperscattering-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/p/pyhyperscattering/pyhyperscattering-{{ version }}.tar.gz
   sha256: 99fe317f8e24204a125fc281b7eb9602959b323d5d4cfc5ad4d3aa3505c74523
 
 build:
+  number: 0
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 1
-
+  
 requirements:
   host:
-    - python {{ python_min }}
+    - python
+    - pip
     - setuptools
     - wheel
     - versioneer
-    - pip
   run:
     - python >={{ python_min }}
     - h5py
@@ -37,7 +35,8 @@ requirements:
     - fabio
     - pydata-sphinx-theme
     - numexpr !=2.8.5,!=2.8.6
-
+  run_constrained:
+    - pyhyperscattering >={{ version }}
 test:
   requires:
     - python {{ python_min }}
@@ -46,12 +45,69 @@ test:
     - PyHyperScattering
   commands:
     - pip check
-
+outputs:
+  - name: pyhyperscattering-base
+    build:
+      script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  - name: pyhyperscattering
+    build:
+      noarch: python
+      script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
+    requirements:
+      host:
+        - python {{ python_min }}
+      run:
+        - python >={{ python_min }}
+        - {{ pin_subpackage("pyhyperscattering-base", max_pin="x.x.x") }}
+        # ---------- all-nogpu extras ----------
+        - tiled >=0.1.0a74
+        - bluesky-tiled-plugins
+        - pyopencl
+        - dask
+        - holoviews
+        - hvplot
+    test:
+      requires:
+        - python {{ python_min }}
+        - pip
+      commands:
+        - pip check
+      imports:
+        - PyHyperScattering
+  - name: pyhyperscattering-gpu
+    build:
+      noarch: python
+      script: "{{ PYTHON }} -c 'import sys; sys.exit(0)'"
+    requirements:
+      host:
+        - python {{ python_min }}
+      run:
+        - python >={{ python_min }}
+        - {{ pin_subpackage("pyhyperscattering-base", max_pin="x.x.x") }}
+        # ---------- shared with all-nogpu ----------
+        - tiled[client] >=0.1.0a74
+        - bluesky-tiled-plugins
+        - pyopencl
+        - dask
+        - holoviews
+        - hvplot
+        # ---------- GPU-specific additions ----------
+        - cupy
+        - cudatoolkit              # resolves to host GPU at install time
+    test:
+      requires:
+        - python {{ python_min }}
+        - pip
+      commands:
+        - pip check
+      imports:
+        - PyHyperScattering
 about:
   summary: Utilities for loading, reducing, fitting, and plotting hyperspectral x-ray and neutron scattering data.
   license: NIST-PD-fallback
-  home: https://www.github.com/usnistgov/PyHyperScattering
+  home: https://github.com/usnistgov/PyHyperScattering
 
 extra:
+  feedstock-name: pyhyperscattering
   recipe-maintainers:
     - pbeaucage
