@@ -1,4 +1,4 @@
-{% set version = "0.2.10" %}
+{% set version = "0.2.11" %}
 
 package:
   name: pyhyperscattering-base
@@ -6,12 +6,12 @@ package:
 
 source:
   url: https://pypi.org/packages/source/p/pyhyperscattering/pyhyperscattering-{{ version }}.tar.gz
-  sha256: 99fe317f8e24204a125fc281b7eb9602959b323d5d4cfc5ad4d3aa3505c74523
+  sha256: 59978487a0a64fef40a9a3527b19979e6c3a17f28a5efc7b1eafa32f4e651242
 
 build:
   number: 0
   noarch: python
-  
+
 requirements:
   host:
     - python
